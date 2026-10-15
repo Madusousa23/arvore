@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+/**arvore binária*/
+
+typedef struct NO{
+	int dado;
+	struct NO *esquerda;
+	struct NO *direita;
+}NO;
+
+//função para criar um novo nó na árvore
+
+NO*criarNO(int dado){
+	NO* novoNO = (NO *) malloc(sizeof(NO));
+	if(novoNO == NULL){
+		printf("Erro na alocação de memória.\n");
+		exit(1);
+	}
+	novoNo ->dado = dado;
+	novoNO ->esquerda = NULL;
+	novoNO ->direita = NULL;
+	return novoNO;
+}
+
+//função para inserir
+NO* inserirNO(NO *raiz, int dado){
+	if(raiz == NULL){
+		return criarNO(dado);
+	}else{
+		if(dado <= raiz->dado){
+			raiz->esquerda = inserirNO(raiz->esquerda,dado)
+		}else{
+			raiz->direita = inserirNO(raiz->direita,dado)
+		}
+		return raiz;
+	}
+	
+}
+
+
+int main(){
+	//menor =esquerda, maior = direita
+	NO* = raiz = NULL;
+	raiz = inserirNO(raiz,5);
+	raiz = inserirNO(raiz,3);
+	raiz = inserirNO(raiz,7);
+	raiz = inserirNO(raiz,2);
+	raiz = inserirNO(raiz,4);
+	raiz = inserirNO(raiz,6);
+	raiz = inserirNO(raiz,8);
+}
