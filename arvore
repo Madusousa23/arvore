@@ -1,51 +1,164 @@
+
 #include <stdio.h>
 #include <stdlib.h>
-/**arvore binária*/
+#include <locale.h>
 
-typedef struct NO{
-	int dado;
-	struct NO *esquerda;
-	struct NO *direita;
-}NO;
+/* ==========================================
+   ARVORE BINARIA DE BUSCA (BST)
+   Menores a esquerda, maiores a direita
+   ========================================== */
 
-//função para criar um novo nó na árvore
+typedef struct NO {
+    int dado;
+    struct NO *esquerda;
+    struct NO *direita;
+} NO;
 
-NO*criarNO(int dado){
-	NO* novoNO = (NO *) malloc(sizeof(NO));
-	if(novoNO == NULL){
-		printf("Erro na alocação de memória.\n");
-		exit(1);
-	}
-	novoNo ->dado = dado;
-	novoNO ->esquerda = NULL;
-	novoNO ->direita = NULL;
-	return novoNO;
+/* Cria um novo no */
+NO* criarNO(int dado) {
+    NO* novoNO = malloc(sizeof(NO));
+
+    if (novoNO == NULL) {
+        printf("Erro na alocacao de memoria!\n");
+        exit(1);
+    }
+
+    novoNO->dado = dado;
+    novoNO->esquerda = NULL;
+    novoNO->direita = NULL;
+
+    return novoNO;
 }
 
-//função para inserir
-NO* inserirNO(NO *raiz, int dado){
-	if(raiz == NULL){
-		return criarNO(dado);
-	}else{
-		if(dado <= raiz->dado){
-			raiz->esquerda = inserirNO(raiz->esquerda,dado)
-		}else{
-			raiz->direita = inserirNO(raiz->direita,dado)
-		}
-		return raiz;
-	}
-	
+/* Insere um valor na arvore */
+NO* inserirNO(NO *raiz, int dado) {
+    if (raiz == NULL) {
+        return criarNO(dado);
+    }
+
+    if (dado <= raiz->dado) {
+        raiz->esquerda = inserirNO(raiz->esquerda, dado);
+    } else {
+        raiz->direita = inserirNO(raiz->direita, dado);
+    }
+
+    return raiz;
 }
 
+/* PRE-ORDEM: Raiz -> Esquerda -> Direita */
+void preOrdem(NO *raiz) {
+    if (raiz != NULL) {
+        printf("%d ", raiz->dado);
+        preOrdem(raiz->esquerda);
+        preOrdem(raiz->direita);
+    }
+}
 
-int main(){
-	//menor =esquerda, maior = direita
-	NO* = raiz = NULL;
-	raiz = inserirNO(raiz,5);
-	raiz = inserirNO(raiz,3);
-	raiz = inserirNO(raiz,7);
-	raiz = inserirNO(raiz,2);
-	raiz = inserirNO(raiz,4);
-	raiz = inserirNO(raiz,6);
-	raiz = inserirNO(raiz,8);
+/* EM ORDEM: Esquerda -> Raiz -> Direita */
+void emOrdem(NO *raiz) {
+    if (raiz != NULL) {
+        emOrdem(raiz->esquerda);
+        printf("%d ", raiz->dado);
+        emOrdem(raiz->direita);
+    }
+}
+
+/* POS-ORDEM: Esquerda -> Direita -> Raiz */
+void posOrdem(NO *raiz) {
+    if (raiz != NULL) {
+        posOrdem(raiz->esquerda);
+        posOrdem(raiz->direita);
+        printf("%d ", raiz->dado);
+    }
+}
+
+/* Desenha a arvore deitada */
+void desenharArvore(NO *raiz, int espaco) {
+    if (raiz == NULL) {
+        return;
+    }
+
+    espaco += 6;
+
+    desenharArvore(raiz->direita, espaco);
+
+    for (int i = 6; i < espaco; i++) {
+        printf(" ");
+    }
+
+    printf("%d\n", raiz->dado);
+
+    desenharArvore(raiz->esquerda, espaco);
+}
+
+/* Libera a memoria da arvore */
+void liberarArvore(NO *raiz) {
+    if (raiz != NULL) {
+        liberarArvore(raiz->esquerda);
+        liberarArvore(raiz->direita);
+        free(raiz);
+    }
+}
+
+/* Exibe uma linha decorativa */
+void linha(void) {
+    printf("====================================================\n");
+}
+
+int main(void) {
+    setlocale(LC_ALL, "");
+
+    NO* raiz = NULL;
+
+    /* Inserindo os valores */
+    int valores[] = {5, 3, 7, 2, 4, 6, 8};
+    int quantidade = sizeof(valores) / sizeof(valores[0]);
+
+    for (int i = 0; i < quantidade; i++) {
+        raiz = inserirNO(raiz, valores[i]);
+    }
+
+    /* Cabecalho */
+    printf("\n");
+    linha();
+    printf("          ARVORE BINARIA DE BUSCA (BST)\n");
+    linha();
+
+    /* Desenho da arvore */
+    printf("\n");
+    printf("                 ESTRUTURA DA ARVORE\n");
+    printf("                 (Visualizacao deitada)\n\n");
+
+    desenharArvore(raiz, 0);
+
+    /* Percursos */
+    printf("\n");
+    linha();
+    printf("                 PERCURSOS DA ARVORE\n");
+    linha();
+
+    printf("\n");
+    printf(" PRE-ORDEM  (Raiz -> Esquerda -> Direita)\n");
+    printf(" Resultado: ");
+    preOrdem(raiz);
+
+    printf("\n\n");
+    printf(" EM ORDEM   (Esquerda -> Raiz -> Direita)\n");
+    printf(" Resultado: ");
+    emOrdem(raiz);
+
+    printf("\n\n");
+    printf(" POS-ORDEM  (Esquerda -> Direita -> Raiz)\n");
+    printf(" Resultado: ");
+    posOrdem(raiz);
+
+    printf("\n\n");
+    linha();
+    printf("                 FIM DO PROGRAMA\n");
+    linha();
+    printf("\n");
+
+    liberarArvore(raiz);
+
+    return 0;
 }
